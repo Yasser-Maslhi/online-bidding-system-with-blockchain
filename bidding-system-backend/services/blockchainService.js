@@ -1,7 +1,10 @@
 const Web3 = require('web3');
-const web3 = new Web3('http://localhost:8545'); // Local Ethereum node
-const contractABI = require('../path_to_contract_abi'); // Import the smart contract ABI
-const contractAddress = 'YOUR_CONTRACT_ADDRESS'; // Replace with actual deployed contract address
+
+// Web3 initialization using an HTTP provider
+const web3 = new Web3('http://localhost:8545'); // Replace with your blockchain provider (local or remote)
+
+const contractABI = require('../path_to_contract_abi'); // Import your smart contract ABI
+const contractAddress = 'YOUR_CONTRACT_ADDRESS'; // Replace with your deployed contract address
 
 exports.recordBid = async (bid) => {
   const contract = new web3.eth.Contract(contractABI, contractAddress);
