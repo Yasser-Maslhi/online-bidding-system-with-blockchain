@@ -1,24 +1,23 @@
 const Bid = require('../models/bid');
 const blockchainService = require('../services/blockchainService');
 
-exports.createBid = async (req, res) => {
-  const { userId, amount } = req.body;
+exports.placeBid = async (req, res) => {
+    const { bidAmount, userId } = req.body;
+    
+    // Save bid to database
+    const newBid = new Bid({ userId, bidAmount });
+    await newBid.save();
 
-  const newBid = new Bid({ userId, amount });
-  await newBid.save();
+    // Interact with blockchain smart contract
+    const result = await blockchainService.placeBid(userId, bidAmount);
 
-  // Interact with the blockchain to record the bid
-  const tx = await blockchainService.recordBid(newBid);
-  res.status(201).json({ message: 'Bid created and recorded on blockchain', tx });
-};
-
-exports.getBids = async (req, res) => {
-  const bids = await Bid.find().populate('userId', 'username');
-  res.status(200).json(bids);
+    res.status(201).json({
+        message: 'Bid placed successfully',
+        blockchainTx: result
+    });
 };
 
 exports.getHighestBid = async (req, res) => {
-  const highestBid = await Bid.findOne().sort({ amount: -1 }).populate('userId', 'username');
-  res.status(200).json(highestBid);
+    const highestBid = await Bid.findOne().sort({ bidAmount: -1 }).limit(1);
+    res.status(200).json(highestBid);
 };
-

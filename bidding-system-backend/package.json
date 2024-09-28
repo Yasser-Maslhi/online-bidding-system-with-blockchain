@@ -7,7 +7,7 @@
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
-  "author": "Your Name",
+  "author": "Yasser Maslhi",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",

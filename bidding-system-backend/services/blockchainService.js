@@ -1,18 +1,23 @@
 const Web3 = require('web3');
+const web3 = new Web3('http://localhost:8545'); // Local Ethereum node
 
-// Web3 initialization using an HTTP provider
-const web3 = new Web3('http://localhost:8545'); // Replace with your blockchain provider (local or remote)
+const contractABI = [/* ABI JSON from Solidity contract compilation */];
+const contractAddress = '0xYourContractAddress';
 
-const contractABI = require('../path_to_contract_abi'); // Import your smart contract ABI
-const contractAddress = 'YOUR_CONTRACT_ADDRESS'; // Replace with your deployed contract address
+const contract = new web3.eth.Contract(contractABI, contractAddress);
 
-exports.recordBid = async (bid) => {
-  const contract = new web3.eth.Contract(contractABI, contractAddress);
-  const tx = await contract.methods.placeBid(bid.amount).send({ from: 'YOUR_WALLET_ADDRESS', value: bid.amount });
-  return tx;
+exports.placeBid = async (userId, bidAmount) => {
+    // Interact with the blockchain contract
+    const accounts = await web3.eth.getAccounts();
+    const receipt = await contract.methods.placeBid(userId).send({
+        from: accounts[0],
+        value: web3.utils.toWei(bidAmount.toString(), 'ether')
+    });
+    return receipt;
 };
 
-exports.getBlockchainInfo = async () => {
-  const latestBlock = await web3.eth.getBlock('latest');
-  return latestBlock;
+exports.getContractDetails = async () => {
+    const details = await contract.methods.getHighestBid().call();
+    return details;
 };
+
