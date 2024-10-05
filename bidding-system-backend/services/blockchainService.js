@@ -1,8 +1,8 @@
-const Web3 = require('web3');
+const { Web3 } = require('web3');
 const web3 = new Web3('http://localhost:8545'); // Local Ethereum node
 
 const contractABI = [/* ABI JSON from Solidity contract compilation */];
-const contractAddress = '0xYourContractAddress';
+const contractAddress = '0x7fBBCD50B3104CbbdB26676a9161A59719bdDDeC';
 
 const contract = new web3.eth.Contract(contractABI, contractAddress);
 
