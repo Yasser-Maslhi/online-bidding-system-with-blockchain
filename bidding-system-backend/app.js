@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
 const bidRoutes = require('./routes/bidRoutes');
-
+const { run } = require('./dbConnect')
 const app = express();
 app.use(bodyParser.json());
+run().catch(console.dir)
 
-mongoose.connect('mongodb://localhost:27017/bidding-system', { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use('/users', userRoutes);
 app.use('/bids', bidRoutes);
