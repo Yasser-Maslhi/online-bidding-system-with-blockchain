@@ -1,25 +1,21 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const dotenv = require('dotenv').config();
-const {DB_USER,DB_PASS } = process.env
-const uri = `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.mtghp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+const { DB_USER, DB_PASS } = process.env;
+
+const uri = `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.mtghp.mongodb.net/?retryWrites=true&w=majority`;
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log("Successfully connected to MongoDB!");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error.message);
+    process.exit(1); 
   }
-});
-const run = async () => {
-    try {
-        // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
-        // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
-      } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-      }
 };
 
-module.exports = { run, client };
+module.exports = connectDB;
