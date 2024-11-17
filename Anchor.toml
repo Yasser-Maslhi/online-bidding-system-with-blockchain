@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-my_gp_contract = "CsyFSB4fUHaFmtwhWMBqoUrcXdiQHnwWLiRjsL1aKiYi"
+my_gp_contract = "9H5gWALcNSpLDZV8moHk6sXWBvGZmm7zkaEH1h1bYByH"
 
 [registry]
 url = "https://api.apr.dev"
@@ -16,4 +16,5 @@ cluster = "http://127.0.0.1:8899"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
+
 test = "yarn run mocha -t 1000000 tests/"
