@@ -77,6 +77,8 @@ exports.initializeAuction = async (req, res) => {
     }
 };
 
+
+
 // Place a bid on an auction
 exports.placeBid = async (req, res) => {
     try {
