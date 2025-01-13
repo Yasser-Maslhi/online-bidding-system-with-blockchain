@@ -65,7 +65,8 @@ exports.initializeAuction = async (req, res) => {
 
         // Interact with blockchain smart contract
         const auction = await blockchainService.initializeAuction(auctionEndTime, itemId);
-
+        const newBid = new Bid({ itemId,  itemName , auctionId: auction.publicKey.toString()});
+        await newBid.save();
         res.status(201).json({
             message: 'Auction initialized successfully',
             auctionId: auction.publicKey.toString(),
@@ -80,29 +81,70 @@ exports.initializeAuction = async (req, res) => {
 
 
 // Place a bid on an auction
+// exports.placeBid = async (req, res) => {
+//     try {
+//         const { bidAmount, userId, auctionId, itemName } = req.body;
+
+//         if (!bidAmount || !userId || !auctionId || !itemName) {
+//             return res.status(400).json({ message: 'All fields (bidAmount, userId, auctionId, itemName) are required' });
+//         }
+
+//         // Save bid to database
+//         const newBid = new Bid({ userId, bidAmount, auctionId, itemName });
+//         await newBid.save();
+
+//         // Interact with blockchain smart contract
+//         const result = await blockchainService.placeBid(auctionId, userId, bidAmount);
+
+//         res.status(201).json({
+//             message: 'Bid placed successfully',
+//             blockchainTx: result,
+//             bid: newBid, // Return the new bid data
+//         });
+//     } catch (error) {
+//         console.error('Error placing bid:', error);
+//         res.status(500).json({ error: error.message });
+//     }
+// };
 exports.placeBid = async (req, res) => {
     try {
-        const { bidAmount, userId, auctionId, itemName } = req.body;
+        const { bidAmount, userId, auctionId, itemName,itemId } = req.body;
 
-        if (!bidAmount || !userId || !auctionId || !itemName) {
+        // Validate required fields
+        if (!bidAmount || !userId  || !itemName) {
             return res.status(400).json({ message: 'All fields (bidAmount, userId, auctionId, itemName) are required' });
         }
 
-        // Save bid to database
-        const newBid = new Bid({ userId, bidAmount, auctionId, itemName });
-        await newBid.save();
+        // Validate bidAmount
+        if (isNaN(bidAmount) || bidAmount <= 0) {
+            return res.status(400).json({ message: 'Invalid bid amount. It must be a positive number.' });
+        }
+
+        // Find existing bid or create a new one
+        const existingBid = await Bid.findOneAndUpdate(
+            { itemId, itemName,auctionId }, 
+            { bidAmount },
+            { new: true, upsert: true }
+        );
 
         // Interact with blockchain smart contract
         const result = await blockchainService.placeBid(auctionId, userId, bidAmount);
 
+        // Return success response
         res.status(201).json({
             message: 'Bid placed successfully',
             blockchainTx: result,
-            bid: newBid, // Return the new bid data
+            bid: existingBid,
         });
     } catch (error) {
         console.error('Error placing bid:', error);
-        res.status(500).json({ error: error.message });
+
+        // Handle blockchain-related errors specifically if needed
+        if (error.isBlockchainError) {
+            return res.status(500).json({ message: 'Blockchain transaction failed', details: error.message });
+        }
+
+        res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
 };
 

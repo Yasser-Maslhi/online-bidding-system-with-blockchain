@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("9H5gWALcNSpLDZV8moHk6sXWBvGZmm7zkaEH1h1bYByH");
+declare_id!("6jzV4Z1dH7wAy2BfrovUJaisNuwQAwZ61phA89m3g978");
 
 #[program]
 pub mod bidding_system {

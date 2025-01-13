@@ -73,7 +73,7 @@ const app = express();
 
 // Enable CORS and specify the allowed origin
 app.use(cors({
-  origin: 'http://localhost:3001', // Adjust to match your frontend's address
+  origin: '*', // Adjust to match your frontend's address
   credentials: true, // Allow cookies and credentials
 }));
 

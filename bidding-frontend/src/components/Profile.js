@@ -30,6 +30,7 @@ const Profile = () => {
                 itemId: initializeData.itemId,
                 itemName: initializeData.itemName,
             });
+            console.log("handleInitializeAuction ",response)
             setSuccessMessage(response.data.message);
             setError('');
             setInitializeData({ itemName: '', itemId: '', auctionEndTime: '' });
@@ -43,13 +44,13 @@ const Profile = () => {
     // Search for Highest Bid
     const fetchHighestBid = async () => {
         try {
-            if (!initializeData.itemName) {
+            if (!initializeData.SitemName) {
                 setError('Please provide an Item Name to search.');
                 return;
             }
             setLoading(true);
             const response = await axios.get('http://localhost:3000/bids/highestBid', {
-                params: { itemName: initializeData.itemName },
+                params: { itemName: initializeData.SitemName },
             });
             setHighestBid(response.data);
             setError('');
@@ -128,8 +129,8 @@ const Profile = () => {
                 <input
                     type="text"
                     placeholder="Enter Item Name"
-                    value={initializeData.itemName}
-                    onChange={(e) => setInitializeData({ ...initializeData, itemName: e.target.value })}
+                    value={initializeData.SitemName}
+                    onChange={(e) => setInitializeData({ ...initializeData, SitemName: e.target.value })}
                 />
                 <button onClick={fetchHighestBid} disabled={loading}>
                     {loading ? 'Searching...' : 'Search'}

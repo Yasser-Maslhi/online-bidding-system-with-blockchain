@@ -10,7 +10,7 @@ require('dotenv').config();
 // Load environment variables
 const CLUSTER_URL = process.env.CLUSTER_URL || 'http://127.0.0.1:8899';
 const WALLET_PATH = process.env.WALLET_PATH || path.resolve(require('os').homedir(), '.config', 'solana', 'id.json');
-const PROGRAM_ID = process.env.PROGRAM_ID || '9H5gWALcNSpLDZV8moHk6sXWBvGZmm7zkaEH1h1bYByH';
+const PROGRAM_ID = process.env.PROGRAM_ID || '6jzV4Z1dH7wAy2BfrovUJaisNuwQAwZ61phA89m3g978';
 
 // Load wallet from the filesystem
 const loadWallet = () => {
