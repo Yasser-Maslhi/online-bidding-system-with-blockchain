@@ -43,7 +43,7 @@ HTML / CSS / JS
 
 ⚙️ Installation & Setup
 ✅ 1) Clone the repository
-git clone https://github.com/your-username/online-bidding-system-with-blockchain.git
+git clone https://github.com/Yasser-Maslhi/online-bidding-system-with-blockchain.git
 cd online-bidding-system-with-blockchain
 
 ✅ 2) Install dependencies
